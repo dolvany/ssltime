@@ -14,5 +14,6 @@ Stream Time Source
 304 5.002115 104.156.90.32
 $
 ```
+Then use the display filter `tcp.stream eq 304` to view the stream in wireshark.
 ## Motivation
 I recently had the need to diagnose slow SSL handshakes to an F5 load balancer. A five second gap between ClientHello and ServerHello was plaguing 0.5% of connections.
