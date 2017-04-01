@@ -11,7 +11,7 @@ done < <(tshark -2 -Tfields -e frame.time_epoch -e tcp.stream -e ip.src -e ssl.h
 # Print column headers.
 echo "Stream Time Source"
 
-# Print rows.
+# Calculate latency and print rows.
 while read -a ch; do
   [ -n "${shtable[${ch[1]}]}" ] || continue
   hellotime=$(echo "${shtable[${ch[1]}]} - ${ch[0]}" | bc)
