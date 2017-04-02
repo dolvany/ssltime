@@ -2,6 +2,7 @@
 
 # SSLTIME
 # Use tshark to find all wireshark tcp.stream IDs with a large delay between SSL ClientHello and ServerHello.
+[ $# -lt 2 ] && echo "Usage: ./ssltime [pcap file] [min latency (ms)]" && exit
 
 # Populate a ClientHello table and a ServerHello array.
 echo "Analyzing Pcap..." 

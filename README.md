@@ -2,7 +2,7 @@
 Advanced pcap analysis with tshark and bash.
 ## Usage
 ```
-./ssltime [pcap file] [latency threshold (ms)]
+./ssltime [pcap file] [min latency (ms)]
 ```
 ## Example
 Show SSL connections with more than 1000ms between ClientHello and ServerHello.
