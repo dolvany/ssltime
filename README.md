@@ -7,7 +7,7 @@ Usage: ./ssltime [pcap file] [min latency (ms)]
 $
 ```
 ## Example
-Show connections with SSL handshake time greater than 1000ms.
+Show connections with an SSL handshake time greater than 1000ms.
 ```
 $ ./ssltime my.pcap 1000
 Analyzing Pcap...
