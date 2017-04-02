@@ -4,16 +4,15 @@
 # Use tshark to find all wireshark tcp.stream IDs with a large delay between SSL ClientHello and ServerHello.
 
 # Populate a ClientHello table and a ServerHello array.
+echo "Analyzing Pcap..." 
 while read -a line; do
   [ "${line[3]}" == 1 ] && chtable+="${line[@]}\n" || shtable["${line[1]}"]="${line[0]}"
 done < <(tshark -2 -Tfields -e frame.time_epoch -e tcp.stream -e ip.src -e ssl.handshake.type -Y 'ssl.handshake.type==1 or ssl.handshake.type==2' -r "$1")
 
-# Print column headers.
-echo "Stream Time Source"
-
 # Calculate latency and print rows.
+echo "Stream Time Source"
 while read -a ch; do
   [ -n "${shtable[${ch[1]}]}" ] || continue
-  hellotime=$(echo "${shtable[${ch[1]}]} - ${ch[0]}" | bc)
-  [ $(echo "$hellotime > $2" | bc) -eq 1  ] && printf '%d %f %s\n' "${ch[1]}" "$hellotime" "${ch[2]}"
+  hellotime=$(echo "(${shtable[${ch[1]}]} - ${ch[0]})*1000" | bc)
+  [ $(echo "$hellotime > $2" | bc) -eq 1  ] && printf '%d %.3fms %s\n' "${ch[1]}" "$hellotime" "${ch[2]}"
 done < <(printf "$chtable")
