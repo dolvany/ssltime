@@ -7,7 +7,7 @@ Advanced pcap analysis with tshark and bash.
 ## Example
 Show SSL connections with more than one second between ClientHello and ServerHello.
 ```
-$ ./ssltime ssl.pcap 1
+$ ./ssltime my.pcap 1
 Stream Time Source
 168 5.001915 104.156.90.38
 290 5.002695 23.235.43.44
