@@ -1,20 +1,20 @@
 #!/bin/bash
 
 # SSLTIME
-# Use tshark to find all wireshark tcp.stream IDs with a large delay between SSL ClientHello and ServerHello.
+# Use tshark to find all wireshark tcp.stream IDs with an SSL handshake time greater than a given value.
 [ $# -lt 2 ] && echo "Usage: ./ssltime [pcap file] [min latency (ms)]" && exit
 
-# Populate a ClientHello table and a ServerHello array.
+# Populate a ClientHello table and a handshake end time array.
 echo "Analyzing Pcap..." 
 while read -a line; do
-  [ "${line[3]}" == 1 ] && chtable+="${line[@]}\n" || shtable["${line[1]}"]="${line[0]}"
-done < <(tshark -2 -Tfields -e frame.time_epoch -e tcp.stream -e ip.src -e ssl.handshake.type -Y 'ssl.handshake.type==1 or ssl.handshake.type==2' -r "$1")
+  [ "${line[3]}" == 1 ] && chtable+="${line[@]}\n" || hsend["${line[1]}"]="${line[0]}"
+done < <(tshark -2 -Tfields -e frame.time_epoch -e tcp.stream -e ip.src -e ssl.handshake.type -Y 'ssl.handshake' -r "$1")
 
 # Calculate latency and print rows.
 echo "Stream Time Source"
 while read -a ch; do
-  [ -n "${shtable[${ch[1]}]}" ] || continue
-  hellotime=$(echo "(${shtable[${ch[1]}]} - ${ch[0]})*1000" | bc)
+  [ -n "${hsend[${ch[1]}]}" ] || continue
+  hellotime=$(echo "(${hsend[${ch[1]}]} - ${ch[0]})*1000" | bc)
   [ $(echo "$hellotime > $2" | bc) -eq 1  ] && printf '%d %.3fms %s\n' "${ch[1]}" "$hellotime" "${ch[2]}" && ((count++))
 done < <(printf "$chtable")
 echo "$count Rows"

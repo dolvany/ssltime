@@ -2,17 +2,20 @@
 Advanced pcap analysis with tshark and bash.
 ## Usage
 ```
-./ssltime [pcap file] [min latency (ms)]
+$ ./ssltime
+Usage: ./ssltime [pcap file] [min latency (ms)]
+$
 ```
 ## Example
-Show SSL connections with more than 1000ms between ClientHello and ServerHello.
+Show connections with SSL handshake time greater than 1000ms.
 ```
 $ ./ssltime my.pcap 1000
 Analyzing Pcap...
 Stream Time Source
-168 5001.915ms 104.156.90.38
-290 5002.695ms 23.235.43.44
-304 5002.115ms 104.156.90.32
+168 5047.552ms 104.156.90.38
+290 5228.129ms 23.235.43.44
+304 5048.646ms 104.156.90.32
+3 Rows
 $
 ```
 Use a latency threshold of `0` to see all rows. Use a display filter of `tcp.stream eq 304` to view the stream in wireshark.
